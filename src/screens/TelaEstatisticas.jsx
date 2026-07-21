@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Cabecalho from "../components/Cabecalho.jsx";
 import BarraNavegacao from "../components/BarraNavegacao.jsx";
 import GraficoCategorias from "../components/GraficoCategorias.jsx";
 import { usarAutenticacao } from "../context/ContextoAutenticacao.jsx";
-import { listenToTransactions, listenToUserProfile } from "../services/servicoFirestore.js";
+import { usarDados } from "../context/ContextoDados.jsx";
 import { formatarMoeda } from "../utils/formatacao.js";
 import { OPCOES_PERIODO } from "../utils/periodo.js";
 import { CATEGORY_META } from "../services/servicoFirestore.js";
@@ -11,20 +11,9 @@ import { formatarData } from "../utils/formatacao.js";
 
 export default function TelaEstatisticas() {
   const { user } = usarAutenticacao();
-  const [profile, setProfile] = useState(null);
-  const [transactions, setTransactions] = useState([]);
+  const { profile, transactions } = usarDados();
   const [chartData, setChartData] = useState({ period: "month", totals: [] });
   const [filteredTransactions, setFilteredTransactions] = useState([]);
-
-  useEffect(() => {
-    if (!user) return;
-    const unsubProfile = listenToUserProfile(user.uid, setProfile);
-    const unsubTx = listenToTransactions(user.uid, setTransactions);
-    return () => {
-      unsubProfile();
-      unsubTx();
-    };
-  }, [user]);
 
   const periodLabel =
     OPCOES_PERIODO.find((p) => p.key === chartData.period)?.label || "";

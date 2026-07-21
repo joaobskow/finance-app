@@ -1,23 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Camera, KeyRound, LogOut, Mail, Pencil, User as UserIcon } from "lucide-react";
 import BarraNavegacao from "../components/BarraNavegacao.jsx";
 import { usarAutenticacao } from "../context/ContextoAutenticacao.jsx";
-import { listenToUserProfile, updateUserProfile } from "../services/servicoFirestore.js";
+import { usarDados } from "../context/ContextoDados.jsx";
+import { updateUserProfile } from "../services/servicoFirestore.js";
 
 export default function TelaPerfil() {
   const { user, logout } = usarAutenticacao();
-  const [profile, setProfile] = useState(null);
+  const { profile } = usarDados();
   const [showPassword, setShowPassword] = useState(false);
   const [photoStatus, setPhotoStatus] = useState("");
   const [photoMenuOpen, setPhotoMenuOpen] = useState(false);
   const inputRef = useRef(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) return;
-    return listenToUserProfile(user.uid, setProfile);
-  }, [user]);
 
   async function handleLogout() {
     await logout();

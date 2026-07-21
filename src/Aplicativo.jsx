@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProvedorAutenticacao } from "./context/ContextoAutenticacao.jsx";
+import { ProvedorDados } from "./context/ContextoDados.jsx";
 import { ProvedorTema } from "./context/ContextoTema.jsx";
 import RotaProtegida from "./routes/RotaProtegida.jsx";
 import PromptInstalacao from "./components/PromptInstalacao.jsx";
@@ -15,7 +16,8 @@ export default function Aplicativo() {
     <ProvedorTema>
       <BrowserRouter>
         <ProvedorAutenticacao>
-          <Routes>
+          <ProvedorDados>
+            <Routes>
             <Route path="/login" element={<TelaLogin />} />
             <Route
               path="/"
@@ -49,8 +51,9 @@ export default function Aplicativo() {
                 </RotaProtegida>
               }
             />
-          </Routes>
-          <PromptInstalacao />
+            </Routes>
+            <PromptInstalacao />
+          </ProvedorDados>
         </ProvedorAutenticacao>
       </BrowserRouter>
     </ProvedorTema>

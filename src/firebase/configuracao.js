@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { browserPopupRedirectResolver, initializeAuth, inMemoryPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -12,5 +12,10 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+// A sessão existe somente enquanto esta instância do app estiver aberta.
+// Assim, ao fechar o PWA o usuário precisa entrar novamente.
+export const auth = initializeAuth(app, {
+  persistence: inMemoryPersistence,
+  popupRedirectResolver: browserPopupRedirectResolver,
+});
 export const db = getFirestore(app);

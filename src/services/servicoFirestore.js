@@ -38,6 +38,13 @@ export const CATEGORY_META = {
 // Categorias que têm meta mensal correspondente
 const GOAL_CATEGORIES = ["food", "transport", "leisure", "other"];
 
+function dataComHorarioAtual(date) {
+  if (!date) return new Date().toISOString();
+  const [year, month, day] = date.split("-").map(Number);
+  const now = new Date();
+  return new Date(year, month - 1, day, now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds()).toISOString();
+}
+
 /** Escuta o documento do usuário (saldo, nome, email) em tempo real */
 export function listenToUserProfile(uid, callback) {
   return onSnapshot(doc(db, COLECOES.usuarios, uid), (snap) => {
@@ -95,7 +102,7 @@ export async function addExpense(uid, { title, category, amount, customCategory,
     ...(category === "other" && customCategory ? { categoriaPersonalizada: customCategory } : {}),
     valor: -Math.abs(amount),
     // Meio-dia evita que a data selecionada seja deslocada por fuso horário ao ser exibida.
-    criadoEm: date ? new Date(`${date}T12:00:00`).toISOString() : new Date().toISOString(),
+    criadoEm: dataComHorarioAtual(date),
   });
   batch.update(userRef, { saldo: increment(-Math.abs(amount)) });
   await batch.commit();
@@ -130,7 +137,7 @@ export async function addIncome(uid, { title, amount, date }) {
     categoria: CATEGORIA_PARA_BANCO.income,
     valor: Math.abs(amount),
     // Meio-dia evita que a data selecionada seja deslocada por fuso horário ao ser exibida.
-    criadoEm: date ? new Date(`${date}T12:00:00`).toISOString() : new Date().toISOString(),
+    criadoEm: dataComHorarioAtual(date),
   });
   batch.update(userRef, { saldo: increment(Math.abs(amount)) });
   await batch.commit();

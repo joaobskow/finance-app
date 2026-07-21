@@ -66,6 +66,7 @@ body {
 .tela-app {
   width: min(100%, 480px) !important;
   min-height: 100dvh !important;
+  padding-top: env(safe-area-inset-top) !important;
   padding-bottom: calc(78px + env(safe-area-inset-bottom)) !important;
 }
 

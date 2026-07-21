@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Cabecalho from "../components/Cabecalho.jsx";
 import CartaoSaldo from "../components/CartaoSaldo.jsx";
 import BotoesAcao from "../components/BotoesAcao.jsx";
@@ -10,40 +10,21 @@ import ModalAdicionarGasto from "../components/ModalAdicionarGasto.jsx";
 import ModalAdicionarSaldo from "../components/ModalAdicionarSaldo.jsx";
 import ModalEditarMetas from "../components/ModalEditarMetas.jsx";
 import { usarAutenticacao } from "../context/ContextoAutenticacao.jsx";
-import {
-  listenToGoals,
-  listenToTransactions,
-  listenToUserProfile,
-  CATEGORY_META,
-  deleteTransaction,
-} from "../services/servicoFirestore.js";
+import { usarDados } from "../context/ContextoDados.jsx";
+import { CATEGORY_META, deleteTransaction } from "../services/servicoFirestore.js";
 import { formatarData } from "../utils/formatacao.js";
 
 const GOAL_ORDER = ["food", "transport", "leisure", "other"];
 
 export default function TelaInicio() {
   const { user } = usarAutenticacao();
-  const [profile, setProfile] = useState(null);
-  const [goals, setGoals] = useState([]);
-  const [transactions, setTransactions] = useState([]);
+  const { profile, goals, transactions } = usarDados();
   const [showAddExpense, setShowAddExpense] = useState(false);
   const [showAddBalance, setShowAddBalance] = useState(false);
   const [showEditGoals, setShowEditGoals] = useState(false);
   const [showScanInfo, setShowScanInfo] = useState(false);
   const [expenseToDelete, setExpenseToDelete] = useState(null);
   const [deletingExpense, setDeletingExpense] = useState(false);
-
-  useEffect(() => {
-    if (!user) return;
-    const unsubProfile = listenToUserProfile(user.uid, setProfile);
-    const unsubGoals = listenToGoals(user.uid, setGoals);
-    const unsubTx = listenToTransactions(user.uid, setTransactions);
-    return () => {
-      unsubProfile();
-      unsubGoals();
-      unsubTx();
-    };
-  }, [user]);
 
   const sortedGoals = [...goals].sort(
     (a, b) => GOAL_ORDER.indexOf(a.id) - GOAL_ORDER.indexOf(b.id)
