@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { usarAutenticacao } from "../context/ContextoAutenticacao.jsx";
+import planejaMaisLogo from "/Planeja+.png";
 
 export default function TelaLogin() {
   const [mode, setMode] = useState("login"); // "login" | "signup"
@@ -72,25 +73,30 @@ export default function TelaLogin() {
             height: 64,
             borderRadius: 20,
             margin: "0 auto 16px",
-            background: "var(--accent-ink)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "#fff",
-            fontWeight: 700,
-            fontSize: 19,
-            fontFamily: "var(--font-mono)",
             boxShadow: "0 8px 20px rgba(16,22,31,0.18)",
+            overflow: "hidden",
           }}
         >
-          R$
+          <img
+            src={planejaMaisLogo}
+            alt="Planeja+"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: 14,
+            }}
+          />
         </div>
         <h1 style={{ fontSize: 24, fontWeight: 800, margin: "0 0 4px" }}>
-          {mode === "login" ? "Bem-vindo de volta" : "Crie sua conta"}
+          {mode === "login" ? "Bem-vindo" : "Crie sua conta"}
         </h1>
         <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: 0 }}>
           {mode === "login"
-            ? "Entre para ver suas finanças"
+            ? "Cada centavo, no seu lugar"
             : "Organize seus gastos em minutos"}
         </p>
       </div>
